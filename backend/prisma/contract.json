@@ -1,0 +1,1005 @@
+{
+  "schemaVersion": "1",
+  "targetFamily": "sql",
+  "target": "postgres",
+  "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
+  "roots": {
+    "complaint_employees": {
+      "model": "ComplaintEmployees",
+      "namespace": "public"
+    },
+    "complaint_types": {
+      "model": "ComplaintTypes",
+      "namespace": "public"
+    },
+    "complaints": {
+      "model": "Complaints",
+      "namespace": "public"
+    },
+    "customers": {
+      "model": "Customers",
+      "namespace": "public"
+    },
+    "employees": {
+      "model": "Employees",
+      "namespace": "public"
+    },
+    "messages": {
+      "model": "Messages",
+      "namespace": "public"
+    }
+  },
+  "domain": {
+    "namespaces": {
+      "public": {
+        "models": {
+          "ComplaintEmployees": {
+            "fields": {
+              "complaintId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "employeeId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "complaint": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "complaintId"
+                  ],
+                  "targetFields": [
+                    "complaintId"
+                  ]
+                },
+                "to": {
+                  "model": "Complaints",
+                  "namespace": "public"
+                }
+              },
+              "employee": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "employeeId"
+                  ],
+                  "targetFields": [
+                    "employeeId"
+                  ]
+                },
+                "to": {
+                  "model": "Employees",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "complaintId": {
+                  "column": "complaint_id"
+                },
+                "employeeId": {
+                  "column": "employee_id"
+                }
+              },
+              "namespaceId": "public",
+              "table": "complaint_employees"
+            }
+          },
+          "ComplaintTypes": {
+            "fields": {
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "typeId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "complaints": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "typeId"
+                  ],
+                  "targetFields": [
+                    "typeId"
+                  ]
+                },
+                "to": {
+                  "model": "Complaints",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "name": {
+                  "column": "name"
+                },
+                "typeId": {
+                  "column": "type_id"
+                }
+              },
+              "namespaceId": "public",
+              "table": "complaint_types"
+            }
+          },
+          "Complaints": {
+            "fields": {
+              "complaintDetail": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "complaintId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "customerId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "typeId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "_type": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "typeId"
+                  ],
+                  "targetFields": [
+                    "typeId"
+                  ]
+                },
+                "to": {
+                  "model": "ComplaintTypes",
+                  "namespace": "public"
+                }
+              },
+              "complaintEmployees": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "complaintId"
+                  ],
+                  "targetFields": [
+                    "complaintId"
+                  ]
+                },
+                "to": {
+                  "model": "ComplaintEmployees",
+                  "namespace": "public"
+                }
+              },
+              "customer": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "customerId"
+                  ],
+                  "targetFields": [
+                    "customerId"
+                  ]
+                },
+                "to": {
+                  "model": "Customers",
+                  "namespace": "public"
+                }
+              },
+              "messages": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "complaintId"
+                  ],
+                  "targetFields": [
+                    "complaintId"
+                  ]
+                },
+                "to": {
+                  "model": "Messages",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "complaintDetail": {
+                  "column": "complaint_detail"
+                },
+                "complaintId": {
+                  "column": "complaint_id"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "customerId": {
+                  "column": "customer_id"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "typeId": {
+                  "column": "type_id"
+                }
+              },
+              "namespaceId": "public",
+              "table": "complaints"
+            }
+          },
+          "Customers": {
+            "fields": {
+              "contact": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "customerId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              }
+            },
+            "relations": {
+              "complaints": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "customerId"
+                  ],
+                  "targetFields": [
+                    "customerId"
+                  ]
+                },
+                "to": {
+                  "model": "Complaints",
+                  "namespace": "public"
+                }
+              },
+              "messages": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "customerId"
+                  ],
+                  "targetFields": [
+                    "customerId"
+                  ]
+                },
+                "to": {
+                  "model": "Messages",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "contact": {
+                  "column": "contact"
+                },
+                "customerId": {
+                  "column": "customer_id"
+                },
+                "name": {
+                  "column": "name"
+                }
+              },
+              "namespaceId": "public",
+              "table": "customers"
+            }
+          },
+          "Employees": {
+            "fields": {
+              "employeeId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "phone": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 20
+                  }
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              }
+            },
+            "relations": {
+              "complaintEmployees": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "employeeId"
+                  ],
+                  "targetFields": [
+                    "employeeId"
+                  ]
+                },
+                "to": {
+                  "model": "ComplaintEmployees",
+                  "namespace": "public"
+                }
+              },
+              "messages": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "employeeId"
+                  ],
+                  "targetFields": [
+                    "employeeId"
+                  ]
+                },
+                "to": {
+                  "model": "Messages",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "employeeId": {
+                  "column": "employee_id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "phone": {
+                  "column": "phone"
+                },
+                "title": {
+                  "column": "title"
+                }
+              },
+              "namespaceId": "public",
+              "table": "employees"
+            }
+          },
+          "Messages": {
+            "fields": {
+              "complaintId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "customerId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "employeeId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "messageId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "messageText": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "complaint": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "complaintId"
+                  ],
+                  "targetFields": [
+                    "complaintId"
+                  ]
+                },
+                "to": {
+                  "model": "Complaints",
+                  "namespace": "public"
+                }
+              },
+              "customer": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "customerId"
+                  ],
+                  "targetFields": [
+                    "customerId"
+                  ]
+                },
+                "to": {
+                  "model": "Customers",
+                  "namespace": "public"
+                }
+              },
+              "employee": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "employeeId"
+                  ],
+                  "targetFields": [
+                    "employeeId"
+                  ]
+                },
+                "to": {
+                  "model": "Employees",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "complaintId": {
+                  "column": "complaint_id"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "customerId": {
+                  "column": "customer_id"
+                },
+                "employeeId": {
+                  "column": "employee_id"
+                },
+                "messageId": {
+                  "column": "message_id"
+                },
+                "messageText": {
+                  "column": "message_text"
+                }
+              },
+              "namespaceId": "public",
+              "table": "messages"
+            }
+          }
+        }
+      }
+    }
+  },
+  "storage": {
+    "namespaces": {
+      "public": {
+        "entries": {
+          "table": {
+            "complaint_employees": {
+              "columns": {
+                "complaint_id": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "employee_id": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "complaint_employees_complaint_id_fkey",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "complaint_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "complaint_employees"
+                  },
+                  "target": {
+                    "columns": [
+                      "complaint_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "complaints"
+                  }
+                },
+                {
+                  "name": "complaint_employees_employee_id_fkey",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "employee_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "complaint_employees"
+                  },
+                  "target": {
+                    "columns": [
+                      "employee_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "employees"
+                  }
+                }
+              ],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "complaint_id",
+                  "employee_id"
+                ],
+                "name": "complaint_employees_pkey"
+              },
+              "uniques": []
+            },
+            "complaint_types": {
+              "columns": {
+                "name": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "type_id": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "type_id"
+                ],
+                "name": "complaint_types_pkey"
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "name"
+                  ],
+                  "name": "complaint_types_name_key"
+                }
+              ]
+            },
+            "complaints": {
+              "checks": [
+                {
+                  "expression": "((status)::text = ANY ((ARRAY['OPEN'::character varying, 'IN_PROGRESS'::character varying, 'RESOLVED'::character varying])::text[]))",
+                  "name": "check_complaint_status"
+                }
+              ],
+              "columns": {
+                "complaint_detail": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "complaint_id": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamp-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamp",
+                  "nullable": false
+                },
+                "customer_id": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "OPEN"
+                  },
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "type_id": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "fk_complaint_customer",
+                  "source": {
+                    "columns": [
+                      "customer_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "complaints"
+                  },
+                  "target": {
+                    "columns": [
+                      "customer_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "customers"
+                  }
+                },
+                {
+                  "name": "fk_complaint_type",
+                  "source": {
+                    "columns": [
+                      "type_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "complaints"
+                  },
+                  "target": {
+                    "columns": [
+                      "type_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "complaint_types"
+                  }
+                }
+              ],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "complaint_id"
+                ],
+                "name": "complaints_pkey"
+              },
+              "uniques": []
+            },
+            "customers": {
+              "columns": {
+                "contact": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "customer_id": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "customer_id"
+                ],
+                "name": "customers_pkey"
+              },
+              "uniques": []
+            },
+            "employees": {
+              "columns": {
+                "employee_id": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "phone": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 20
+                  }
+                },
+                "title": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "employee_id"
+                ],
+                "name": "employees_pkey"
+              },
+              "uniques": []
+            },
+            "messages": {
+              "checks": [
+                {
+                  "expression": "(((customer_id IS NOT NULL) AND (employee_id IS NULL)) OR ((customer_id IS NULL) AND (employee_id IS NOT NULL)))",
+                  "name": "check_message_sender"
+                }
+              ],
+              "columns": {
+                "complaint_id": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamp-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamp",
+                  "nullable": false
+                },
+                "customer_id": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "employee_id": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "message_id": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "message_text": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "fk_message_complaint",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "complaint_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "messages"
+                  },
+                  "target": {
+                    "columns": [
+                      "complaint_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "complaints"
+                  }
+                },
+                {
+                  "name": "fk_message_customer",
+                  "source": {
+                    "columns": [
+                      "customer_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "messages"
+                  },
+                  "target": {
+                    "columns": [
+                      "customer_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "customers"
+                  }
+                },
+                {
+                  "name": "fk_message_employee",
+                  "source": {
+                    "columns": [
+                      "employee_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "messages"
+                  },
+                  "target": {
+                    "columns": [
+                      "employee_id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "employees"
+                  }
+                }
+              ],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "message_id"
+                ],
+                "name": "messages_pkey"
+              },
+              "uniques": []
+            }
+          }
+        },
+        "id": "public",
+        "kind": "postgres-schema"
+      }
+    },
+    "storageHash": "415263ec95d86db3aa76deee8023b5e4e3c646d9361d41cad989d4fc781ac50d"
+  },
+  "capabilities": {
+    "postgres": {
+      "distinctOn": true,
+      "jsonAgg": true,
+      "lateral": true,
+      "limit": true,
+      "orderBy": true,
+      "returning": true
+    },
+    "sql": {
+      "checkConstraint": true,
+      "defaultInInsert": true,
+      "enums": true,
+      "insertOnConflictSkip": true,
+      "insertOnConflictWithoutTarget": true,
+      "lateral": true,
+      "returning": true,
+      "scalarList": true
+    }
+  },
+  "extensions": {},
+  "meta": {},
+  "_generated": {
+    "warning": "⚠️  GENERATED FILE - DO NOT EDIT",
+    "message": "This file is automatically generated by \"prisma contract emit\".",
+    "regenerate": "To regenerate, run: prisma contract emit"
+  }
+}

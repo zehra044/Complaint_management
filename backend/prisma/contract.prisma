@@ -1,0 +1,72 @@
+// use prisma-8
+// Contract inferred from the live database schema. Edit as needed, then run `prisma contract emit`.
+
+model ComplaintTypes {
+  typeId     Int          @id(map: "complaint_types_pkey") @default(autoincrement()) @map("type_id")
+  name       VarChar(100) @unique(map: "complaint_types_name_key")
+  complaints Complaints[]
+
+  @@map("complaint_types")
+}
+
+model Customers {
+  customerId Int          @id(map: "customers_pkey") @default(autoincrement()) @map("customer_id")
+  name       VarChar(100)
+  contact    VarChar(100)
+  complaints Complaints[]
+  messages   Messages[]
+
+  @@map("customers")
+}
+
+model Complaints {
+  complaintId        Int                  @id(map: "complaints_pkey") @default(autoincrement()) @map("complaint_id")
+  customerId         Int                  @map("customer_id")
+  typeId             Int                  @map("type_id")
+  complaintDetail    String               @map("complaint_detail")
+  status             String          @default("OPEN")
+  createdAt TimestampString @default(now()) @map("created_at") 
+   complaintEmployees ComplaintEmployees[]
+  messages           Messages[]
+  customer           Customers            @relation(fields: [customerId], references: [customerId], map: "fk_complaint_customer", index: false)
+  _type              ComplaintTypes       @relation(fields: [typeId], references: [typeId], map: "fk_complaint_type", index: false)
+
+  @@check(expression: "((status)::text = ANY ((ARRAY['OPEN'::character varying, 'IN_PROGRESS'::character varying, 'RESOLVED'::character varying])::text[]))", map: "check_complaint_status")
+  @@map("complaints")
+}
+
+model Employees {
+  employeeId         Int                  @id(map: "employees_pkey") @default(autoincrement()) @map("employee_id")
+  name               VarChar(100)
+  phone              VarChar(20)
+  title              VarChar(100)
+  complaintEmployees ComplaintEmployees[]
+  messages           Messages[]
+
+  @@map("employees")
+}
+
+model ComplaintEmployees {
+  complaintId Int        @map("complaint_id")
+  employeeId  Int        @map("employee_id")
+  complaint   Complaints @relation(fields: [complaintId], references: [complaintId], onDelete: Cascade, map: "complaint_employees_complaint_id_fkey", index: false)
+  employee    Employees  @relation(fields: [employeeId], references: [employeeId], onDelete: Cascade, map: "complaint_employees_employee_id_fkey", index: false)
+
+  @@id([complaintId, employeeId], map: "complaint_employees_pkey")
+  @@map("complaint_employees")
+}
+
+model Messages {
+  messageId   Int        @id(map: "messages_pkey") @default(autoincrement()) @map("message_id")
+  complaintId Int        @map("complaint_id")
+  customerId  Int?       @map("customer_id")
+  employeeId  Int?       @map("employee_id")
+  messageText String     @map("message_text")
+  createdAt   Timestamp  @default(now()) @map("created_at")
+  complaint   Complaints @relation(fields: [complaintId], references: [complaintId], onDelete: Cascade, map: "fk_message_complaint", index: false)
+  customer    Customers? @relation(fields: [customerId], references: [customerId], map: "fk_message_customer", index: false)
+  employee    Employees? @relation(fields: [employeeId], references: [employeeId], map: "fk_message_employee", index: false)
+
+  @@check(expression: "(((customer_id IS NOT NULL) AND (employee_id IS NULL)) OR ((customer_id IS NULL) AND (employee_id IS NOT NULL)))", map: "check_message_sender")
+  @@map("messages")
+}
