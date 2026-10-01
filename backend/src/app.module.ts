@@ -6,7 +6,7 @@ import { ComplaintsModule } from './complaints/complaints.module.js';
 import { PrismaService } from './prisma/prisma.service.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { AuthModule } from './auth/auth.module.js';
-
+import { UsersModule } from './users/users.module.js';
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
@@ -21,6 +21,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     ComplaintsModule,
     PrismaModule,
     AuthModule,
+    UsersModule,
 
   ],
   controllers: [AppController],
