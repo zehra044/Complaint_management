@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'415263ec95d86db3aa76deee8023b5e4e3c646d9361d41cad989d4fc781ac50d'>;
+  StorageHashBase<'6b0ddccfad6a63788f6799d5a342f56ae48d7f586f15da62238c3d867a5960e8'>;
 export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
@@ -256,9 +256,9 @@ export type FieldOutputTypes = {
     readonly Complaints: {
       readonly complaintDetail: CodecTypes['pg/text@1']['output'];
       readonly complaintId: CodecTypes['pg/int4@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamp-string@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamp-temporal@1']['output'];
       readonly customerId: CodecTypes['pg/int4@1']['output'];
-      readonly status: CodecTypes['pg/text@1']['output'];
+      readonly status: Varchar<20>;
       readonly typeId: CodecTypes['pg/int4@1']['output'];
     };
     readonly ComplaintTypes: {
@@ -269,12 +269,14 @@ export type FieldOutputTypes = {
       readonly contact: Varchar<100>;
       readonly customerId: CodecTypes['pg/int4@1']['output'];
       readonly name: Varchar<100>;
+      readonly userId: CodecTypes['pg/int4@1']['output'] | null;
     };
     readonly Employees: {
       readonly employeeId: CodecTypes['pg/int4@1']['output'];
       readonly name: Varchar<100>;
       readonly phone: Varchar<20>;
       readonly title: Varchar<100>;
+      readonly userId: CodecTypes['pg/int4@1']['output'] | null;
     };
     readonly Messages: {
       readonly complaintId: CodecTypes['pg/int4@1']['output'];
@@ -283,6 +285,13 @@ export type FieldOutputTypes = {
       readonly employeeId: CodecTypes['pg/int4@1']['output'] | null;
       readonly messageId: CodecTypes['pg/int4@1']['output'];
       readonly messageText: CodecTypes['pg/text@1']['output'];
+    };
+    readonly Users: {
+      readonly createdAt: CodecTypes['pg/timestamp-temporal@1']['output'];
+      readonly email: Varchar<150>;
+      readonly passwordHash: CodecTypes['pg/text@1']['output'];
+      readonly role: Varchar<20>;
+      readonly userId: CodecTypes['pg/int4@1']['output'];
     };
   };
 };
@@ -295,9 +304,9 @@ export type FieldInputTypes = {
     readonly Complaints: {
       readonly complaintDetail: CodecTypes['pg/text@1']['input'];
       readonly complaintId: CodecTypes['pg/int4@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamp-string@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamp-temporal@1']['input'];
       readonly customerId: CodecTypes['pg/int4@1']['input'];
-      readonly status: CodecTypes['pg/text@1']['input'];
+      readonly status: CodecTypes['sql/varchar@1']['input'];
       readonly typeId: CodecTypes['pg/int4@1']['input'];
     };
     readonly ComplaintTypes: {
@@ -308,12 +317,14 @@ export type FieldInputTypes = {
       readonly contact: CodecTypes['sql/varchar@1']['input'];
       readonly customerId: CodecTypes['pg/int4@1']['input'];
       readonly name: CodecTypes['sql/varchar@1']['input'];
+      readonly userId: CodecTypes['pg/int4@1']['input'] | null;
     };
     readonly Employees: {
       readonly employeeId: CodecTypes['pg/int4@1']['input'];
       readonly name: CodecTypes['sql/varchar@1']['input'];
       readonly phone: CodecTypes['sql/varchar@1']['input'];
       readonly title: CodecTypes['sql/varchar@1']['input'];
+      readonly userId: CodecTypes['pg/int4@1']['input'] | null;
     };
     readonly Messages: {
       readonly complaintId: CodecTypes['pg/int4@1']['input'];
@@ -322,6 +333,13 @@ export type FieldInputTypes = {
       readonly employeeId: CodecTypes['pg/int4@1']['input'] | null;
       readonly messageId: CodecTypes['pg/int4@1']['input'];
       readonly messageText: CodecTypes['pg/text@1']['input'];
+    };
+    readonly Users: {
+      readonly createdAt: CodecTypes['pg/timestamp-temporal@1']['input'];
+      readonly email: CodecTypes['sql/varchar@1']['input'];
+      readonly passwordHash: CodecTypes['pg/text@1']['input'];
+      readonly role: CodecTypes['sql/varchar@1']['input'];
+      readonly userId: CodecTypes['pg/int4@1']['input'];
     };
   };
 };
@@ -338,21 +356,23 @@ export type StorageColumnTypes = {
     readonly complaints: {
       readonly complaint_detail: CodecTypes['pg/text@1']['output'];
       readonly complaint_id: CodecTypes['pg/int4@1']['output'];
-      readonly created_at: CodecTypes['pg/timestamp-string@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamp-temporal@1']['output'];
       readonly customer_id: CodecTypes['pg/int4@1']['output'];
-      readonly status: CodecTypes['pg/text@1']['output'];
+      readonly status: Varchar<20>;
       readonly type_id: CodecTypes['pg/int4@1']['output'];
     };
     readonly customers: {
       readonly contact: Varchar<100>;
       readonly customer_id: CodecTypes['pg/int4@1']['output'];
       readonly name: Varchar<100>;
+      readonly user_id: CodecTypes['pg/int4@1']['output'] | null;
     };
     readonly employees: {
       readonly employee_id: CodecTypes['pg/int4@1']['output'];
       readonly name: Varchar<100>;
       readonly phone: Varchar<20>;
       readonly title: Varchar<100>;
+      readonly user_id: CodecTypes['pg/int4@1']['output'] | null;
     };
     readonly messages: {
       readonly complaint_id: CodecTypes['pg/int4@1']['output'];
@@ -361,6 +381,13 @@ export type StorageColumnTypes = {
       readonly employee_id: CodecTypes['pg/int4@1']['output'] | null;
       readonly message_id: CodecTypes['pg/int4@1']['output'];
       readonly message_text: CodecTypes['pg/text@1']['output'];
+    };
+    readonly users: {
+      readonly created_at: CodecTypes['pg/timestamp-temporal@1']['output'];
+      readonly email: Varchar<150>;
+      readonly password_hash: CodecTypes['pg/text@1']['output'];
+      readonly role: Varchar<20>;
+      readonly user_id: CodecTypes['pg/int4@1']['output'];
     };
   };
 };
@@ -377,21 +404,23 @@ export type StorageColumnInputTypes = {
     readonly complaints: {
       readonly complaint_detail: CodecTypes['pg/text@1']['input'];
       readonly complaint_id: CodecTypes['pg/int4@1']['input'];
-      readonly created_at: CodecTypes['pg/timestamp-string@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamp-temporal@1']['input'];
       readonly customer_id: CodecTypes['pg/int4@1']['input'];
-      readonly status: CodecTypes['pg/text@1']['input'];
+      readonly status: CodecTypes['sql/varchar@1']['input'];
       readonly type_id: CodecTypes['pg/int4@1']['input'];
     };
     readonly customers: {
       readonly contact: CodecTypes['sql/varchar@1']['input'];
       readonly customer_id: CodecTypes['pg/int4@1']['input'];
       readonly name: CodecTypes['sql/varchar@1']['input'];
+      readonly user_id: CodecTypes['pg/int4@1']['input'] | null;
     };
     readonly employees: {
       readonly employee_id: CodecTypes['pg/int4@1']['input'];
       readonly name: CodecTypes['sql/varchar@1']['input'];
       readonly phone: CodecTypes['sql/varchar@1']['input'];
       readonly title: CodecTypes['sql/varchar@1']['input'];
+      readonly user_id: CodecTypes['pg/int4@1']['input'] | null;
     };
     readonly messages: {
       readonly complaint_id: CodecTypes['pg/int4@1']['input'];
@@ -400,6 +429,13 @@ export type StorageColumnInputTypes = {
       readonly employee_id: CodecTypes['pg/int4@1']['input'] | null;
       readonly message_id: CodecTypes['pg/int4@1']['input'];
       readonly message_text: CodecTypes['pg/text@1']['input'];
+    };
+    readonly users: {
+      readonly created_at: CodecTypes['pg/timestamp-temporal@1']['input'];
+      readonly email: CodecTypes['sql/varchar@1']['input'];
+      readonly password_hash: CodecTypes['pg/text@1']['input'];
+      readonly role: CodecTypes['sql/varchar@1']['input'];
+      readonly user_id: CodecTypes['pg/int4@1']['input'];
     };
   };
 };
@@ -421,9 +457,9 @@ export namespace Models {
   export type public_Complaints = {
     complaintDetail: CodecTypes['pg/text@1']['output'];
     complaintId: CodecTypes['pg/int4@1']['output'];
-    createdAt: CodecTypes['pg/timestamp-string@1']['output'];
+    createdAt: CodecTypes['pg/timestamp-temporal@1']['output'];
     customerId: CodecTypes['pg/int4@1']['output'];
-    status: CodecTypes['pg/text@1']['output'];
+    status: Varchar<20>;
     typeId: CodecTypes['pg/int4@1']['output'];
     _type: public_ComplaintTypes;
     complaintEmployees: public_ComplaintEmployees[];
@@ -435,18 +471,22 @@ export namespace Models {
     contact: Varchar<100>;
     customerId: CodecTypes['pg/int4@1']['output'];
     name: Varchar<100>;
+    userId: CodecTypes['pg/int4@1']['output'] | null;
     complaints: public_Complaints[];
     messages: public_Messages[];
-    readonly [RelationKeys]?: 'complaints' | 'messages';
+    user: public_Users | null;
+    readonly [RelationKeys]?: 'complaints' | 'messages' | 'user';
   };
   export type public_Employees = {
     employeeId: CodecTypes['pg/int4@1']['output'];
     name: Varchar<100>;
     phone: Varchar<20>;
     title: Varchar<100>;
+    userId: CodecTypes['pg/int4@1']['output'] | null;
     complaintEmployees: public_ComplaintEmployees[];
     messages: public_Messages[];
-    readonly [RelationKeys]?: 'complaintEmployees' | 'messages';
+    user: public_Users | null;
+    readonly [RelationKeys]?: 'complaintEmployees' | 'messages' | 'user';
   };
   export type public_Messages = {
     complaintId: CodecTypes['pg/int4@1']['output'];
@@ -460,6 +500,16 @@ export namespace Models {
     employee: public_Employees | null;
     readonly [RelationKeys]?: 'complaint' | 'customer' | 'employee';
   };
+  export type public_Users = {
+    createdAt: CodecTypes['pg/timestamp-temporal@1']['output'];
+    email: Varchar<150>;
+    passwordHash: CodecTypes['pg/text@1']['output'];
+    role: Varchar<20>;
+    userId: CodecTypes['pg/int4@1']['output'];
+    customers: public_Customers | null;
+    employees: public_Employees | null;
+    readonly [RelationKeys]?: 'customers' | 'employees';
+  };
 }
 
 export declare const models: {
@@ -470,6 +520,7 @@ export declare const models: {
     Customers: Models.public_Customers;
     Employees: Models.public_Employees;
     Messages: Models.public_Messages;
+    Users: Models.public_Users;
   };
 };
 
@@ -585,7 +636,7 @@ type ContractBase = Omit<
                 };
                 readonly created_at: {
                   readonly nativeType: 'timestamp';
-                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly codecId: 'pg/timestamp-temporal@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
@@ -595,13 +646,14 @@ type ContractBase = Omit<
                   readonly nullable: false;
                 };
                 readonly status: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
                   readonly nullable: false;
                   readonly default: {
                     readonly kind: 'literal';
-                    readonly value: DefaultLiteralValue<'pg/text@1', 'OPEN'>;
+                    readonly value: DefaultLiteralValue<'sql/varchar@1', 'OPEN'>;
                   };
+                  readonly typeParams: { readonly length: 20 };
                 };
                 readonly type_id: {
                   readonly nativeType: 'int4';
@@ -667,14 +719,35 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly typeParams: { readonly length: 100 };
                 };
+                readonly user_id: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
               };
               primaryKey: {
                 readonly columns: readonly ['customer_id'];
                 readonly name: 'customers_pkey';
               };
-              uniques: readonly [];
+              uniques: readonly [
+                { readonly columns: readonly ['user_id']; readonly name: 'customers_user_id_key' },
+              ];
               indexes: readonly [];
-              foreignKeys: readonly [];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'customers';
+                    readonly columns: readonly ['user_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'users';
+                    readonly columns: readonly ['user_id'];
+                  };
+                  readonly name: 'fk_customer_user';
+                },
+              ];
             };
             readonly employees: {
               columns: {
@@ -705,14 +778,35 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly typeParams: { readonly length: 100 };
                 };
+                readonly user_id: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
               };
               primaryKey: {
                 readonly columns: readonly ['employee_id'];
                 readonly name: 'employees_pkey';
               };
-              uniques: readonly [];
+              uniques: readonly [
+                { readonly columns: readonly ['user_id']; readonly name: 'employees_user_id_key' },
+              ];
               indexes: readonly [];
-              foreignKeys: readonly [];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'employees';
+                    readonly columns: readonly ['user_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'users';
+                    readonly columns: readonly ['user_id'];
+                  };
+                  readonly name: 'fk_employee_user';
+                },
+              ];
             };
             readonly messages: {
               columns: {
@@ -800,6 +894,52 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly users: {
+              columns: {
+                readonly created_at: {
+                  readonly nativeType: 'timestamp';
+                  readonly codecId: 'pg/timestamp-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly email: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 150 };
+                };
+                readonly password_hash: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly role: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'sql/varchar@1', 'CUSTOMER'>;
+                  };
+                  readonly typeParams: { readonly length: 20 };
+                };
+                readonly user_id: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['user_id']; readonly name: 'users_pkey' };
+              uniques: readonly [
+                { readonly columns: readonly ['email']; readonly name: 'users_email_key' },
+              ];
+              indexes: readonly [];
+              foreignKeys: readonly [];
+            };
           };
         };
       };
@@ -826,6 +966,7 @@ type ContractBase = Omit<
     readonly customers: { readonly namespace: 'public' & NamespaceId; readonly model: 'Customers' };
     readonly employees: { readonly namespace: 'public' & NamespaceId; readonly model: 'Employees' };
     readonly messages: { readonly namespace: 'public' & NamespaceId; readonly model: 'Messages' };
+    readonly users: { readonly namespace: 'public' & NamespaceId; readonly model: 'Users' };
   };
   readonly domain: {
     readonly namespaces: {
@@ -891,7 +1032,7 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly codecId: 'pg/timestamp-temporal@1';
                 };
               };
               readonly customerId: {
@@ -900,7 +1041,11 @@ type ContractBase = Omit<
               };
               readonly status: {
                 readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 20 };
+                };
               };
               readonly typeId: {
                 readonly nullable: false;
@@ -1027,6 +1172,10 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 100 };
                 };
               };
+              readonly userId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
             };
             readonly relations: {
               readonly complaints: {
@@ -1051,6 +1200,18 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['customerId'];
                 };
               };
+              readonly user: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Users';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
             };
             readonly storage: {
               readonly table: 'customers';
@@ -1059,6 +1220,7 @@ type ContractBase = Omit<
                 readonly contact: { readonly column: 'contact' };
                 readonly customerId: { readonly column: 'customer_id' };
                 readonly name: { readonly column: 'name' };
+                readonly userId: { readonly column: 'user_id' };
               };
             };
           };
@@ -1092,6 +1254,10 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 100 };
                 };
               };
+              readonly userId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
             };
             readonly relations: {
               readonly complaintEmployees: {
@@ -1116,6 +1282,18 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['employeeId'];
                 };
               };
+              readonly user: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Users';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
             };
             readonly storage: {
               readonly table: 'employees';
@@ -1125,6 +1303,7 @@ type ContractBase = Omit<
                 readonly name: { readonly column: 'name' };
                 readonly phone: { readonly column: 'phone' };
                 readonly title: { readonly column: 'title' };
+                readonly userId: { readonly column: 'user_id' };
               };
             };
           };
@@ -1206,6 +1385,78 @@ type ContractBase = Omit<
                 readonly employeeId: { readonly column: 'employee_id' };
                 readonly messageId: { readonly column: 'message_id' };
                 readonly messageText: { readonly column: 'message_text' };
+              };
+            };
+          };
+          readonly Users: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-temporal@1';
+                };
+              };
+              readonly email: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 150 };
+                };
+              };
+              readonly passwordHash: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly role: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 20 };
+                };
+              };
+              readonly userId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly customers: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Customers';
+                };
+                readonly cardinality: '1:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
+              readonly employees: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Employees';
+                };
+                readonly cardinality: '1:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'users';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly email: { readonly column: 'email' };
+                readonly passwordHash: { readonly column: 'password_hash' };
+                readonly role: { readonly column: 'role' };
+                readonly userId: { readonly column: 'user_id' };
               };
             };
           };

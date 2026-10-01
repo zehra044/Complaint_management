@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { Varchar } from '@prisma/orm-postgres/target/codec-types';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateComplaintDto } from './create-complaint.dto.js';
 
@@ -33,7 +34,7 @@ async updateComplaintStatus(
   return this.prisma.db.orm.public.Complaints
     .where({ complaintId: id })
     .update({
-      status,
+      status: status as Varchar<20>,
     });
 }
 

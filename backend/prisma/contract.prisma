@@ -9,12 +9,27 @@ model ComplaintTypes {
   @@map("complaint_types")
 }
 
+model Users {
+  userId       Int          @id(map: "users_pkey") @default(autoincrement()) @map("user_id")
+  email        VarChar(150) @unique(map: "users_email_key")
+  passwordHash String       @map("password_hash")
+  role         VarChar(20)  @default("CUSTOMER")
+  createdAt    Timestamp    @default(now()) @map("created_at")
+  customers    Customers?
+  employees    Employees?
+
+  @@check(expression: "((role)::text = ANY ((ARRAY['CUSTOMER'::character varying, 'EMPLOYEE'::character varying, 'MANAGER'::character varying])::text[]))", map: "check_user_role")
+  @@map("users")
+}
+
 model Customers {
   customerId Int          @id(map: "customers_pkey") @default(autoincrement()) @map("customer_id")
   name       VarChar(100)
   contact    VarChar(100)
+  userId     Int?         @unique(map: "customers_user_id_key") @map("user_id")
   complaints Complaints[]
   messages   Messages[]
+  user       Users?       @relation(fields: [userId], references: [userId], map: "fk_customer_user")
 
   @@map("customers")
 }
@@ -24,9 +39,9 @@ model Complaints {
   customerId         Int                  @map("customer_id")
   typeId             Int                  @map("type_id")
   complaintDetail    String               @map("complaint_detail")
-  status             String          @default("OPEN")
-  createdAt TimestampString @default(now()) @map("created_at") 
-   complaintEmployees ComplaintEmployees[]
+  status             VarChar(20)          @default("OPEN")
+  createdAt          Timestamp            @default(now()) @map("created_at")
+  complaintEmployees ComplaintEmployees[]
   messages           Messages[]
   customer           Customers            @relation(fields: [customerId], references: [customerId], map: "fk_complaint_customer", index: false)
   _type              ComplaintTypes       @relation(fields: [typeId], references: [typeId], map: "fk_complaint_type", index: false)
@@ -40,8 +55,10 @@ model Employees {
   name               VarChar(100)
   phone              VarChar(20)
   title              VarChar(100)
+  userId             Int?                 @unique(map: "employees_user_id_key") @map("user_id")
   complaintEmployees ComplaintEmployees[]
   messages           Messages[]
+  user               Users?               @relation(fields: [userId], references: [userId], map: "fk_employee_user")
 
   @@map("employees")
 }
