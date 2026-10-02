@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ComplaintsController } from './complaints.controller.js';
-import { ComplaintsService } from './complaints.service.js';
+import { EmployeesController } from './employees.controller.js';
+import { EmployeesService } from './employees.service.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
@@ -8,7 +8,7 @@ import { RolesGuard } from '../auth/roles.guard.js';
 
 @Module({
   imports: [PrismaModule, AuthModule],
-  controllers: [ComplaintsController],
-  providers: [ComplaintsService, JwtAuthGuard, RolesGuard],
+  controllers: [EmployeesController],
+  providers: [EmployeesService, JwtAuthGuard, RolesGuard],
 })
-export class ComplaintsModule {}
+export class EmployeesModule {}

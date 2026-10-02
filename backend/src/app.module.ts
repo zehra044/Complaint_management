@@ -7,6 +7,7 @@ import { PrismaService } from './prisma/prisma.service.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
+import { EmployeesModule } from './employees/employees.module.js';
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
@@ -22,6 +23,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     PrismaModule,
     AuthModule,
     UsersModule,
+    EmployeesModule,
 
   ],
   controllers: [AppController],
