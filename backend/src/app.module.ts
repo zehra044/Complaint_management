@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { EmployeesModule } from './employees/employees.module.js';
 import { MessagesModule } from './messages/messages.module.js';
+import { ReportsModule } from './reports/reports.module.js';
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
@@ -26,6 +27,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     UsersModule,
     EmployeesModule,
     MessagesModule,
+    ReportsModule,
 
   ],
   controllers: [AppController],

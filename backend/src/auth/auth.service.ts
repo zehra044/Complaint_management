@@ -7,6 +7,7 @@ import type { Varchar } from '@prisma/orm-postgres/target/codec-types';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/LoginDto.js';
+import { ChangePasswordDto } from './dto/change-password.dto.js';
 
 @Injectable()
 export class AuthService {
@@ -68,5 +69,30 @@ export class AuthService {
         role: user.role,
       },
     };
+  }
+
+  async changePassword(userId: number, data: ChangePasswordDto) {
+    const user = await this.prisma.db.orm.public.Users.where({
+      userId,
+    }).first();
+
+    if (!user) {
+      throw new UnauthorizedException('Account no longer exists');
+    }
+
+    const currentValid = await bcrypt.compare(
+      data.currentPassword,
+      user.passwordHash,
+    );
+
+    if (!currentValid) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    await this.prisma.db.orm.public.Users.where({ userId }).update({
+      passwordHash: await bcrypt.hash(data.newPassword, 10),
+    });
+
+    return { message: 'Password changed successfully' };
   }
 }
