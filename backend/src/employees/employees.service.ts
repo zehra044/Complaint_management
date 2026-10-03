@@ -31,4 +31,21 @@ export class EmployeesService {
       role: user.role,
     };
   }
+
+  async getEmployees() {
+    const employees = await this.prisma.db.orm.public.Employees.all();
+    const users = await this.prisma.db.orm.public.Users
+      .select('userId', 'email')
+      .all();
+    const emailByUserId = new Map(users.map((u) => [u.userId, u.email]));
+
+    return employees.map((e) => ({
+      employeeId: e.employeeId,
+      name: e.name,
+      phone: e.phone,
+      title: e.title,
+      userId: e.userId,
+      email: e.userId === null ? null : (emailByUserId.get(e.userId) ?? null),
+    }));
+  }
 }

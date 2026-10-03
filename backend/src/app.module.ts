@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module.js';
 import { EmployeesModule } from './employees/employees.module.js';
 import { MessagesModule } from './messages/messages.module.js';
 import { ReportsModule } from './reports/reports.module.js';
+import { CustomersModule } from './customers/customers.module.js';
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
@@ -28,6 +29,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     EmployeesModule,
     MessagesModule,
     ReportsModule,
+    CustomersModule,
 
   ],
   controllers: [AppController],

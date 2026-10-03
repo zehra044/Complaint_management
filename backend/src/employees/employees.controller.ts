@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { EmployeesService } from './employees.service.js';
 import { CreateEmployeeDto } from './create-employee.dto.js';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
@@ -14,5 +14,12 @@ export class EmployeesController {
   @Roles('MANAGER')
   createEmployee(@Body() data: CreateEmployeeDto) {
     return this.employeesService.createEmployee(data);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('MANAGER')
+  getEmployees() {
+    return this.employeesService.getEmployees();
   }
 }
