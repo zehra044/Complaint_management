@@ -43,4 +43,9 @@ describe('RolesGuard', () => {
     const result = guard.canActivate(makeContext({ role: 'CUSTOMER' }));
     expect(result).toBe(false);
   })
+    it('blocks a request that has no user at all', () => {
+    reflector.getAllAndOverride.mockReturnValue(['MANAGER']);
+    const result = guard.canActivate(makeContext());
+    expect(result).toBe(false);
+  });
 });
