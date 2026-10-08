@@ -2,6 +2,10 @@
 /dist
 /node_modules
 /build
+/.claude
+/.agents
+/.cursor
+/.devin
 
 # TypeScript build cache
 *.tsbuildinfo
