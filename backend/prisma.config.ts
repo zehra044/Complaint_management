@@ -8,8 +8,4 @@ export default definePrismaConfig({
       connection: process.env["DATABASE_URL"]!,
     },
   }),
-
-  skills: {
-    agents: ["claude", "cursor", "agents", "devin"],
-  },
 });
