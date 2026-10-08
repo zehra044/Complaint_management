@@ -7,6 +7,9 @@ async function bootstrap() {
     instrument: ObserveInstrument,
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.enableCors({
+  origin: (process.env.CORS_ORIGIN ?? 'http://localhost:5173,http://localhost:3001').split(','),
+});
   await app.listen(process.env.PORT ?? 3000);
 }
 await bootstrap();
